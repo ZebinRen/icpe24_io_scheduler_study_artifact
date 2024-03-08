@@ -110,7 +110,7 @@ if True:
     }
 
     title = None
-    xlabel = 'Concurrent applications'
+    xlabel = 'Concurrent workloads'
     ylabel = 'Throughput (KIOPS)'
     fig_save_path = 'fig-12a-' + fig_name_prefix + '_iops_fg.pdf'
 
@@ -125,95 +125,50 @@ if True:
     ax.tick_params(axis='both', which='major', labelsize=axis_tick_font_size)
     ax.xaxis.set_ticks(range(1, len(x_ticks) + 1), x_ticks)
     # ax.yaxis.set_ticks([0, 100, 200, 300, 400])
-    ax.yaxis.set_ticks([0.1, 1, 10, 100])
+    ax.yaxis.set_ticks([0.1, 1, 10, 100, 1000])
     ax.set_xlim([0.8, len(x_ticks) + 0.5])
-    ax.set_ylim([0.1, 420])
+    ax.set_ylim([0.1, 1000])
 
     for (index, group_name) in zip(range(len(group_list)), group_list):
         # x, y, std_dev, data_label = data[group_name]
         y = y_values[group_name][0:len(t_app_num)]
         x = range(1, len(y) + 1)
-        yerr = std_dev[group_name][0:len(t_app_num)]
+        yerr = None
+        if std_dev:
+            yerr = std_dev[group_name][0:len(t_app_num)]
 
+        cur_color = get_next_color()
         plt.errorbar(
             x,
             y,
             yerr=yerr,
+            marker=dot_style[index % len(dot_style)],
+            linewidth=linewidth,
+            markersize=markersize,
+            color=cur_color,
+        )
+        plt.errorbar(
+            [],
+            [],
+            None,
             label=legend_label[group_name],
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=cur_color,
         )
+        
         # Add data label
         # for i in range(len(data_label)):
         #     ax.text(x[i], y[i], data_label[i], size=datalabel_size)
 
-    plt.legend(fontsize=legend_font_size,
+    leg = plt.legend(fontsize=legend_font_size,
                labelspacing=0.1,
                ncol=2,
                columnspacing=0.2,
                borderpad=0.2)
 
+    for line in leg.get_lines():
+        line.set_linewidth(6)
+
     plt.savefig(fig_save_path, bbox_inches='tight')
-
-# ##########################
-# # Total Bandwidth
-# ##########################
-# if True:
-#     # Data, set unused value to none
-#     group_list = schedulers
-#     y_values = total_bw_results
-#     std_dev = None
-
-#     title = None
-#     xlabel = 'Concurrent applications'
-#     ylabel = 'Bandwidth (GiB/s)'
-#     fig_save_path = fig_name_prefix + '_total_bw.pdf'
-#     fig_save_path = os.path.join(fig_dir, fig_save_path)
-
-#     reset_color()
-#     fig, ax = plt.subplots(figsize=(12, 8))
-
-#     plt.xlabel(xlabel, fontsize=axis_label_font_size)
-#     plt.ylabel(ylabel, fontsize=axis_label_font_size)
-#     plt.grid(True)
-
-#     ax.tick_params(axis='both', which='major', labelsize=axis_tick_font_size)
-#     ax.xaxis.set_ticks(range(1, len(x_ticks) + 1), x_ticks)
-#     ax.set_xlim([0.8, len(x_ticks) + 0.5])
-#     ax.yaxis.set_ticks([0, 5, 10, 15])
-#     ax.set_ylim(0, 16)
-
-#     for (index, group_name) in zip(range(len(group_list)), group_list):
-#         # x, y, std_dev, data_label = data[group_name]
-#         x = range(1, len(y) + 1)
-#         y = y_values[group_name]
-#         y = [i / 1024 for i in y]
-#         yerr = None
-#         if std_dev:
-#             yerr = std_dev[group_name]
-#             yerr = [i / 1024 for i in yerr]
-
-#         plt.errorbar(
-#             x,
-#             y,
-#             yerr=yerr,
-#             label=legend_label[group_name],
-#             marker=dot_style[index % len(dot_style)],
-#             linewidth=linewidth,
-#             markersize=markersize,
-#             # color = get_next_color(),
-#         )
-#         # Add data label
-#         # for i in range(len(data_label)):
-#         #     ax.text(x[i], y[i], data_label[i], size=datalabel_size)
-
-#     # if legend_label != None:
-#     #     plt.legend(fontsize=legend_font_size, labelspacing=0.1)
-#     # plt.legend(fontsize=legend_font_size,
-#     #            ncol=2,
-#     #            loc='upper left',
-#     #            bbox_to_anchor=(0, 1.2),
-#     #            columnspacing=0.3)
-
-#     plt.savefig(fig_save_path, bbox_inches='tight')

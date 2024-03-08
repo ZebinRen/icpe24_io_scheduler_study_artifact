@@ -3,15 +3,14 @@ import matplotlib.pyplot as plt
 import pickle
 
 # Switch to Type 1 Fonts.
-# matplotlib.rcParams['text.usetex'] = True
-# plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
+matplotlib.rcParams['text.usetex'] = True
+plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
 
-matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# Check: https://personal.sron.nl/~pault/
+# Paul Tol's "bright" color scheme -> Figure 1
+matplotlib_color = ['#4477AA', '#228833', '#CCBB44', '#EE6677', '#AA3377', '#66CCEE', '#BBBBBB', '#332288']
 m_color_index = 0
-
-matplotlib_colors = [
-    'blue', 'green', 'red', 'cyan', 'magenta', 'yellw', 'white'
-]
 
 dot_style = [
     '+',

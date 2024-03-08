@@ -57,15 +57,14 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # # Switch to Type 1 Fonts.
-# matplotlib.rcParams['text.usetex'] = True
-# plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
+matplotlib.rcParams['text.usetex'] = True
+plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
 
-matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# Check: https://personal.sron.nl/~pault/
+# Paul Tol's "bright" color scheme -> Figure 1
+matplotlib_color = ['#4477AA', '#228833', '#CCBB44', '#EE6677', '#AA3377', '#66CCEE', '#BBBBBB', '#332288']
 m_color_index = 0
-
-matplotlib_colors = [
-    'blue', 'green', 'red', 'cyan', 'magenta', 'yellw', 'white'
-]
 
 dot_style = [
     '+',
@@ -118,7 +117,7 @@ if True:
     }
 
     title = None
-    xlabel = 'Number of processes'
+    xlabel = '\# processes'
     ylabel = 'Throughput (KIOPS)'
     fig_save_path = 'fig-7-a-tapp-inc-proc-1-dev-10-core.pdf'
 
@@ -150,6 +149,7 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
 
     plt.annotate('',
@@ -160,7 +160,7 @@ if True:
                  xy=(2, 780),
                  xytext=(5, 700),
                  arrowprops=dict(arrowstyle='->', lw=5))
-    plt.text(5, 700, '$\sim$785 KIOPS', size=datalabel_size)
+    plt.text(5, 700, '785.7--790.6 KIOPS', size=datalabel_size)
     plt.annotate('',
                  xy=(3, 567),
                  xytext=(7, 550),
@@ -173,7 +173,7 @@ if True:
     plt.text(7, 350, '315.3 KIOPS', size=datalabel_size)
 
     # Add legend
-    ax.legend(
+    leg = ax.legend(
         fontsize=legend_font_size,
         ncol=3,
         loc='upper left',
@@ -184,6 +184,8 @@ if True:
         columnspacing=0.,
         borderpad=0.,
     )
+    for line in leg.get_lines():
+        line.set_linewidth(6)
 
     plt.savefig(fig_save_path, bbox_inches='tight')
 
@@ -205,7 +207,7 @@ if True:
     }
 
     title = None
-    xlabel = 'Number of processes'
+    xlabel = '\# processes'
     ylabel = 'CPU usage'
     fig_save_path = 'fig-7-a-tapp-inc-proc-1-dev-10-core-cpu.pdf'
 
@@ -237,6 +239,7 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
 
     plt.savefig(fig_save_path, bbox_inches='tight')

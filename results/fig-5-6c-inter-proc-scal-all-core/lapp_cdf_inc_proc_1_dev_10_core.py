@@ -160,15 +160,14 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Switch to Type 1 Fonts.
-# matplotlib.rcParams['text.usetex'] = True
-# plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
+matplotlib.rcParams['text.usetex'] = True
+plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
 
-matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# Check: https://personal.sron.nl/~pault/
+# Paul Tol's "bright" color scheme -> Figure 1
+matplotlib_color = ['#4477AA', '#228833', '#CCBB44', '#EE6677', '#AA3377', '#66CCEE', '#BBBBBB', '#332288']
 m_color_index = 0
-
-matplotlib_colors = [
-    'blue', 'green', 'red', 'cyan', 'magenta', 'yellw', 'white'
-]
 
 dot_style = [
     '+',
@@ -335,10 +334,13 @@ if True:
         #     ax.set_xlim(0, 1500)
         # else:
         if cur_num_proc == '256':
-            ax.set_xlim(0, 3000)
-            ax.set_xticks([0, 500, 1000, 1500, 2000, 2500])
+            ax.set_xlim(0, 3500)
+            # ax.set_xticks([0, 500, 1000, 1500, 2000, 2500, 3000])
+            # ax.set_xticklabels(
+            #     ['0', '500', '1,000', '1,500', '2,000', '2,500', '3,000'])
+            ax.set_xticks([0,  1000,  2000,  3000])
             ax.set_xticklabels(
-                ['0', '500', '1,000', '1,500', '2,000', '2,500'])
+                ['0',  '1,000', '2,000',  '3,000'])
             plt.annotate('',
                          xy=(1100, 0.99),
                          xytext=(1300, 0.73),
@@ -347,10 +349,10 @@ if True:
                          xy=(1810, 0.99),
                          xytext=(1600, 0.82),
                          arrowprops=dict(arrowstyle='->', lw=5))
-            plt.text(1300, 0.65, 'None: 1089.5 $\mu$s', size=datalabel_size)
-            plt.text(1500, 0.75, 'BFQ: 1810.4 $\mu$s', size=datalabel_size)
-            plt.text(1300, 0.55, 'Kyber: 1073.2 $\mu$s', size=datalabel_size)
-            plt.text(1300, 0.45, 'MQ-DL: 1155.1 $\mu$s', size=datalabel_size)
+            plt.text(1300, 0.65, 'None: 1,089.5 $\mu$s', size=datalabel_size)
+            plt.text(1500, 0.75, 'BFQ: 1,810.4 $\mu$s', size=datalabel_size)
+            plt.text(1300, 0.55, 'Kyber: 1,073.2 $\mu$s', size=datalabel_size)
+            plt.text(1300, 0.45, 'MQ-DL: 1,155.1 $\mu$s', size=datalabel_size)
         else:
             continue
 
@@ -376,11 +378,12 @@ if True:
                 p,
                 label=cur_legend_label,
                 linewidth=linewidth,
+                color=get_next_color()
                 #marker=dot_style[index % len(dot_style)],
                 #markersize=markersize,
             )
         # if cur_num_proc == '1':
-        plt.legend(
+        leg = plt.legend(
             fontsize=legend_font_size,
             labelspacing=0.,
             ncol=2,
@@ -389,6 +392,8 @@ if True:
             #    bbox_to_anchor=(0.65, 0.92),
             columnspacing=0.2,
             borderpad=0.)
+        for line in leg.get_lines():
+            line.set_linewidth(6)
 
         plt.savefig(fig_save_path, bbox_inches='tight')
 
@@ -408,7 +413,7 @@ if True:
     }
 
     title = None
-    xlabel = 'Number of processes'
+    xlabel = '\# processes'
     ylabel = 'CPU usage'
     fig_save_path = 'fig-5b-' + fig_name_prefix + '_cpu.pdf'
 
@@ -439,15 +444,19 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
         # Add data label
         # for i in range(len(data_label)):
         #     ax.text(x[i], y[i], data_label[i], size=datalabel_size)
 
-    # plt.legend(fontsize=legend_font_size,
-    #            labelspacing=0.1,
-    #            ncol=1,
-    #            columnspacing=0.2,
-    #            borderpad=0.2)
+    leg = plt.legend(fontsize=legend_font_size,
+               labelspacing=0.1,
+               ncol=1,
+               columnspacing=0.2,
+               borderpad=0.2)
+
+    for line in leg.get_lines():
+        line.set_linewidth(6)
 
     plt.savefig(fig_save_path, bbox_inches='tight')

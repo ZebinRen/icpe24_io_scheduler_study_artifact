@@ -47,15 +47,15 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Switch to Type 1 Fonts.
-# matplotlib.rcParams['text.usetex'] = True
-# plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
+matplotlib.rcParams['text.usetex'] = True
+plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
 
-matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# Check: https://personal.sron.nl/~pault/
+# Paul Tol's "bright" color scheme -> Figure 1
+matplotlib_color = ['#4477AA', '#228833', '#CCBB44', '#EE6677', '#AA3377', '#66CCEE', '#BBBBBB', '#332288']
 m_color_index = 0
 
-matplotlib_colors = [
-    'blue', 'green', 'red', 'cyan', 'magenta', 'yellw', 'white'
-]
 
 dot_style = [
     '+',
@@ -102,19 +102,19 @@ if True:
     std_dev_ax2 = None
     x_ticks = iops_results
     legend_label = {
-        '512': '512B',
-        '1k': '1KiB',
-        '2k': '2KiB',
-        '4k': '4KiB',
-        '8k': '8KiB',
-        '16k': '16KiB',
-        '32k': '32KiB',
-        '64k': '64KiB'
+        '512': '512',
+        '1k': '1K',
+        '2k': '2K',
+        '4k': '4K',
+        '8k': '8K',
+        '16k': '16K',
+        '32k': '32K',
+        '64k': '64K'
     }
 
     title = None
     xlabel = 'Throughput (KIOPS)'
-    ylabel_ax1 = 'Latency ($\mu$s)'
+    ylabel_ax1 = 'Average latency ($\mu$s)'
     fig_save_path = 'fig-1a-qd-iops-vary-bs-throughput.pdf'
 
     reset_color()
@@ -125,8 +125,11 @@ if True:
     ax.grid(True)
 
     ax.tick_params(axis='both', which='major', labelsize=axis_tick_font_size)
-    ax.xaxis.set_ticks([0, 100, 200, 300])
+    ax.xaxis.set_ticks([100, 200, 300, 400])
+    ax.set_xlim([0, 400])
     ax.set_ylim([0, 1000])
+    ax.yaxis.set_ticks([0, 250, 500, 750, 1000])
+    ax.yaxis.set_ticklabels(['0', '250', '500', '750', '1,000'])
 
     # Throughput
     for (index, group_name) in zip(range(len(group_list)), group_list):
@@ -151,6 +154,7 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
 
         if not group_name in [
@@ -160,25 +164,48 @@ if True:
         ]:
             # Add data label
             for i in range(len(x)):
-                if i > 3:
-                    ax.text(x[i], y[i], all_qd[i], size=datalabel_size)
+                if i == 7:
+                    ax.text(x[i]-50, y[i], all_qd[i], size=datalabel_size)
+                elif i == 8:
+                    ax.text(x[i]-10, y[i], all_qd[i], size=datalabel_size)
+                elif i > 3:
+                    ax.text(x[i]-20, y[i], all_qd[i], size=datalabel_size)
 
         if group_name in ['512', '8k']:
             for i in range(len(x)):
                 if i <= 3:
                     ax.text(x[i], y[i], all_qd[i], size=datalabel_size)
 
-    ax.legend(
+    reset_color()
+    x = x_ticks['512']
+    y = y_values_ax1['512']
+    y = [i for i in y if i < 900]
+    x = x[:len(y)]
+    ax.errorbar(
+            x,
+            y,
+            yerr=None,
+            marker=dot_style[0],
+            linewidth=linewidth,
+            markersize=markersize,
+            color=get_next_color(),
+    )
+    
+    leg = ax.legend(
         fontsize=legend_font_size,
         ncol=3,
         loc='upper left',
-        handlelength=1.5,
+        handlelength=1.3,
         handletextpad=0.2,
-        bbox_to_anchor=(0, 1.02),
-        columnspacing=0.2,
-        labelspacing=0.1,
-        borderpad=0,
+        bbox_to_anchor=(-0.03, 1.02),
+        columnspacing=0.15,
+        labelspacing=0.05,
+        borderpad=0.3,
     )
+    
+    for line in leg.get_lines():
+        line.set_linewidth(6)
+
 
     # draw arrows
     plt.arrow(200, 500, 150, -280, width=10, head_width=20, color='black')

@@ -111,7 +111,7 @@ if True:
     }
 
     title = None
-    xlabel = 'Concurrent applications'
+    xlabel = 'Concurrent workloads'
     ylabel = 'Throughput (KIOPS)'
     fig_save_path = 'fig-12b' + fig_name_prefix + '_iops_fg.pdf'
 
@@ -126,9 +126,9 @@ if True:
     ax.tick_params(axis='both', which='major', labelsize=axis_tick_font_size)
     ax.xaxis.set_ticks(range(1, len(x_ticks) + 1), x_ticks)
     # ax.yaxis.set_ticks([0, 100, 200, 300, 400])
-    ax.yaxis.set_ticks([0.1, 1, 10, 100])
+    ax.yaxis.set_ticks([0.1, 1, 10, 100, 1000])
     ax.set_xlim([0.8, len(x_ticks) + 0.5])
-    ax.set_ylim([0.1, 420])
+    ax.set_ylim([0.1, 1000])
 
     for (index, group_name) in zip(range(len(group_list)), group_list):
         # x, y, std_dev, data_label = data[group_name]
@@ -144,16 +144,17 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
         # Add data label
         # for i in range(len(data_label)):
         #     ax.text(x[i], y[i], data_label[i], size=datalabel_size)
 
-    plt.legend(fontsize=legend_font_size,
-               labelspacing=0.1,
-               ncol=2,
-               columnspacing=0.2,
-               borderpad=0.2)
+    # plt.legend(fontsize=legend_font_size,
+    #            labelspacing=0.1,
+    #            ncol=2,
+    #            columnspacing=0.2,
+    #            borderpad=0.2)
 
     plt.savefig(fig_save_path, bbox_inches='tight')
 

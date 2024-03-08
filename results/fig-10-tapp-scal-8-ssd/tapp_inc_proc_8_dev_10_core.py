@@ -50,15 +50,27 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Switch to Type 1 Fonts.
-# matplotlib.rcParams['text.usetex'] = True
-# plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
+matplotlib.rcParams['text.usetex'] = True
+plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
 
-matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# Check: https://personal.sron.nl/~pault/
+# Paul Tol's "bright" color scheme -> Figure 1
+matplotlib_color = ['#4477AA', '#228833', '#CCBB44', '#EE6677', '#AA3377', '#66CCEE', '#BBBBBB', '#332288']
 m_color_index = 0
+def get_next_color():
+    global m_color_index
+    c = matplotlib_color[m_color_index]
+    m_color_index += 1
 
-matplotlib_colors = [
-    'blue', 'green', 'red', 'cyan', 'magenta', 'yellw', 'white'
-]
+    return c
+
+
+def reset_color():
+    global m_color_index
+    m_color_index = 0
+
+
 
 dot_style = [
     '+',
@@ -113,7 +125,7 @@ if True:
     }
 
     title = None
-    xlabel = 'Number of processes'
+    xlabel = '\# processes'
     ylabel = 'Throughput (MIOPS)'
     fig_save_path = 'fig-10-a-tapp-inc-proc-8-dev-10-core.pdf'
 
@@ -147,6 +159,7 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
 
     # None
@@ -184,7 +197,7 @@ if True:
     plt.savefig(fig_save_path, bbox_inches='tight')
 
     # Add legend
-    ax.legend(
+    leg = ax.legend(
         fontsize=legend_font_size,
         ncol=1,
         loc='upper left',
@@ -195,6 +208,9 @@ if True:
         columnspacing=0.,
         borderpad=0.,
     )
+    
+    for line in leg.get_lines():
+        line.set_linewidth(6)
 
     plt.savefig(fig_save_path, bbox_inches='tight')
 

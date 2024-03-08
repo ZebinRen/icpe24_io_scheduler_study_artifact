@@ -80,15 +80,15 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Switch to Type 1 Fonts.
-# matplotlib.rcParams['text.usetex'] = True
-# plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
+matplotlib.rcParams['text.usetex'] = True
+plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
 
-matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# Check: https://personal.sron.nl/~pault/
+# Paul Tol's "bright" color scheme -> Figure 1
+matplotlib_color = ['#4477AA', '#228833', '#CCBB44', '#EE6677', '#AA3377', '#66CCEE', '#BBBBBB', '#332288']
 m_color_index = 0
 
-matplotlib_colors = [
-    'blue', 'green', 'red', 'cyan', 'magenta', 'yellw', 'white'
-]
 
 dot_style = [
     '+',
@@ -121,7 +121,7 @@ datalabel_size = 36
 datalabel_va = 'bottom'
 axis_tick_font_size = 46
 axis_label_font_size = 52
-legend_font_size = 46
+legend_font_size = 42
 
 ####################################
 # Throughput: IOPS
@@ -146,7 +146,7 @@ if True:
 
     title = None
     xlabel = 'Throughput (MIOPS)'
-    ylabel_ax1 = 'Latency ($\mu$s)'
+    ylabel_ax1 = 'Average latency ($\mu$s)'
     fig_save_path = 'fig-3c-qd-iops-inc-proc-4kb-8-dev.pdf'
 
     reset_color()
@@ -160,6 +160,8 @@ if True:
     ax.xaxis.set_ticks([1, 2, 3, 4, 5])
     ax.set_xlim([0, 5.5])
     ax.set_ylim([0, 1000])
+    ax.yaxis.set_ticks([0, 250, 500, 750, 1000])
+    ax.yaxis.set_ticklabels(['0', '250', '500', '750', '1,000'])
 
     # Throughput storage stack
     group_list = ['1', '2', '4', '8', '10', '16']
@@ -182,6 +184,7 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
 
     # Throughput SPDK
@@ -210,9 +213,10 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
 
-    ax.legend(
+    leg = ax.legend(
         fontsize=legend_font_size - 4,
         ncol=4,
         loc='upper left',
@@ -223,5 +227,8 @@ if True:
         labelspacing=0,
         borderpad=0,
     )
+    
+    for line in leg.get_lines():
+        line.set_linewidth(6)
 
     plt.savefig(fig_save_path, bbox_inches='tight')

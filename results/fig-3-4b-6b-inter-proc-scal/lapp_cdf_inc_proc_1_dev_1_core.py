@@ -161,16 +161,14 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Switch to Type 1 Fonts.
-# matplotlib.rcParams['text.usetex'] = True
-# plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
+matplotlib.rcParams['text.usetex'] = True
+plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
 
-matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# Check: https://personal.sron.nl/~pault/
+# Paul Tol's "bright" color scheme -> Figure 1
+matplotlib_color = ['#4477AA', '#228833', '#CCBB44', '#EE6677', '#AA3377', '#66CCEE', '#BBBBBB', '#332288']
 m_color_index = 0
-
-matplotlib_colors = [
-    'blue', 'green', 'red', 'cyan', 'magenta', 'yellw', 'white'
-]
-
 dot_style = [
     '+',
     'X',
@@ -295,7 +293,7 @@ if True:
     }
 
     title = None
-    xlabel = 'Number of processes'
+    xlabel = '\# processes'
     ylabel = 'CPU usage'
     fig_save_path = 'fig-4b-inter-proc-cpu.pdf'
     reset_color()
@@ -325,6 +323,7 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
 
     plt.savefig(fig_save_path, bbox_inches='tight')
@@ -418,7 +417,7 @@ if True:
                          xytext=(800, 0.8),
                          arrowprops=dict(arrowstyle='->', lw=5))
             plt.text(750, 0.7, 'None: 897.0 $\mu$s', size=datalabel_size)
-            plt.text(750, 0.6, 'BFQ: 1028.1 $\mu$s', size=datalabel_size)
+            plt.text(750, 0.6, 'BFQ: 1,028.1 $\mu$s', size=datalabel_size)
             plt.text(750, 0.5, 'Kyber: 962.6 $\mu$s', size=datalabel_size)
             plt.text(750, 0.4, 'MQ-DL: 938.0 $\mu$s', size=datalabel_size)
         elif cur_num_proc == '128':
@@ -434,10 +433,10 @@ if True:
                          xy=(4200, 0.99),
                          xytext=(3000, 0.65),
                          arrowprops=dict(arrowstyle='->', lw=5))
-            plt.text(2800, 0.6, 'None: 3883.0 $\mu$s', size=datalabel_size)
-            plt.text(2800, 0.5, 'BFQ: 4292.6 $\mu$s', size=datalabel_size)
-            plt.text(2800, 0.4, 'Kyber: 4227.1 $\mu$s', size=datalabel_size)
-            plt.text(2800, 0.3, 'MQ-DL: 4112.4 $\mu$s', size=datalabel_size)
+            plt.text(2800, 0.6, 'None: 3,883.0 $\mu$s', size=datalabel_size)
+            plt.text(2800, 0.5, 'BFQ: 4,292.6 $\mu$s', size=datalabel_size)
+            plt.text(2800, 0.4, 'Kyber: 4,227.1 $\mu$s', size=datalabel_size)
+            plt.text(2800, 0.3, 'MQ-DL: 4,112.4 $\mu$s', size=datalabel_size)
 
         plt.xlabel(xlabel, fontsize=axis_label_font_size)
         # Only draw y label and ticks for the first plot
@@ -461,11 +460,14 @@ if True:
                 p,
                 label=cur_legend_label,
                 linewidth=linewidth,
+                color=get_next_color()
             )
         if cur_num_proc == '1':
-            plt.legend(fontsize=legend_font_size,
+            leg = plt.legend(fontsize=legend_font_size,
                        labelspacing=0.,
                        columnspacing=0.2,
                        borderpad=0.)
+            for line in leg.get_lines():
+                line.set_linewidth(6)
 
         plt.savefig(fig_save_path, bbox_inches='tight')

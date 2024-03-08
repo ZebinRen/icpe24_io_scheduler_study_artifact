@@ -161,15 +161,15 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Switch to Type 1 Fonts.
-# matplotlib.rcParams['text.usetex'] = True
-# plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
+matplotlib.rcParams['text.usetex'] = True
+plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
 
-matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# Check: https://personal.sron.nl/~pault/
+# Paul Tol's "bright" color scheme -> Figure 1
+matplotlib_color = ['#4477AA', '#228833', '#CCBB44', '#EE6677', '#AA3377', '#66CCEE', '#BBBBBB', '#332288']
 m_color_index = 0
 
-matplotlib_colors = [
-    'blue', 'green', 'red', 'cyan', 'magenta', 'yellw', 'white'
-]
 
 dot_style = [
     '+',
@@ -329,16 +329,19 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
         # Add data label
         # for i in range(len(data_label)):
         #     ax.text(x[i], y[i], data_label[i], size=datalabel_size)
 
-    plt.legend(fontsize=legend_font_size,
+    leg = plt.legend(fontsize=legend_font_size,
                labelspacing=0.1,
                ncol=1,
                columnspacing=0.2,
                borderpad=0.2)
+    for line in leg.get_lines():
+        line.set_linewidth(6)
 
     plt.savefig(fig_save_path, bbox_inches='tight')
 
@@ -463,8 +466,8 @@ if True:
             # plt.text(90, 0.68, 'Kyber: 1003.5 $\mu$s', size=datalabel_size)
             # plt.text(120, 0.58, 'BFQ: 1155.1 $\mu$s', size=datalabel_size)
             plt.text(130, 0.88, 'None: 806.9 $\mu$s', size=datalabel_size)
-            plt.text(130, 0.78, 'BFQ: 1155.1 $\mu$s', size=datalabel_size)
-            plt.text(130, 0.68, 'Kyber: 1003.5 $\mu$s', size=datalabel_size)
+            plt.text(130, 0.78, 'BFQ: 1,155.1 $\mu$s', size=datalabel_size)
+            plt.text(130, 0.68, 'Kyber: 1,003.5 $\mu$s', size=datalabel_size)
             plt.text(130, 0.58, 'MQ-DL: 946.2 $\mu$s', size=datalabel_size)
         plt.xlabel(xlabel, fontsize=axis_label_font_size)
         if cur_num_proc == '1':
@@ -488,16 +491,19 @@ if True:
                 p,
                 label=cur_legend_label,
                 linewidth=linewidth,
+                color=get_next_color(),
                 #marker=dot_style[index % len(dot_style)],
                 #markersize=markersize,
             )
         if cur_num_proc == '1':
-            plt.legend(
+            leg = plt.legend(
                 fontsize=legend_font_size,
                 labelspacing=0.,
                 #    loc='upper left',
                 #    bbox_to_anchor=(0.65, 0.92),
                 columnspacing=0.2,
                 borderpad=0.)
+            for line in leg.get_lines():
+                line.set_linewidth(6)
 
         plt.savefig(fig_save_path, bbox_inches='tight')

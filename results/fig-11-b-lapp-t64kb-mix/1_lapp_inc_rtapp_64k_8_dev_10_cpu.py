@@ -117,8 +117,8 @@ if True:
     }
 
     title = None
-    xlabel = 'Concurrent applications'
-    ylabel = 'Latency (millisecond)'
+    xlabel = 'Concurrent workloads'
+    ylabel = 'P99 latency (ms)'
     fig_save_path = 'fig-11b-' + fig_name_prefix + '_p99_lat.pdf'
 
     reset_color()
@@ -152,6 +152,7 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
         # Add data label
         # for i in range(len(data_label)):

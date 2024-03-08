@@ -61,15 +61,14 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Switch to Type 1 Fonts.
-# matplotlib.rcParams['text.usetex'] = True
-# plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
+matplotlib.rcParams['text.usetex'] = True
+plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
 
-matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# Check: https://personal.sron.nl/~pault/
+# Paul Tol's "bright" color scheme -> Figure 1
+matplotlib_color = ['#4477AA', '#228833', '#CCBB44', '#EE6677', '#AA3377', '#66CCEE', '#BBBBBB', '#332288']
 m_color_index = 0
-
-matplotlib_colors = [
-    'blue', 'green', 'red', 'cyan', 'magenta', 'yellw', 'white'
-]
 
 dot_style = [
     '+',
@@ -148,16 +147,41 @@ if True:
             yerr = std_dev[group_name]
             yerr = [i / 1000 for i in yerr]
 
+        cur_color = get_next_color()
         ax.errorbar(
             x,
             y,
             yerr=yerr,
+            marker=dot_style[index % len(dot_style)],
+            linewidth=linewidth,
+            markersize=markersize,
+            color=cur_color,
+        )
+        
+        ax.errorbar(
+            [],
+            [],
             label=legend_label[group_name],
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=cur_color,
         )
 
+    leg = ax.legend(
+        fontsize=legend_font_size,
+        ncol=1,
+        loc='upper left',
+        bbox_to_anchor=(-0.02, 1.05),
+        columnspacing=0.2,
+        labelspacing=0.1,
+        borderpad=0.1,
+    )
+    
+    for line in leg.get_lines():
+        print('got line')
+        line.set_linewidth(6)
+    
     # None + Kyber
     plt.annotate('',
                  xy=(1, 0.776),
@@ -203,69 +227,62 @@ if True:
                  arrowprops=dict(arrowstyle='->', lw=5))
     plt.text(3.7, 1.9, '1.90 MIOPS', size=datalabel_size)
 
-    ax.legend(
-        fontsize=legend_font_size,
-        ncol=1,
-        loc='upper left',
-        bbox_to_anchor=(-0.02, 1.05),
-        columnspacing=0.2,
-        labelspacing=0.1,
-        borderpad=0.1,
-    )
+    
 
     plt.savefig(fig_save_path, bbox_inches='tight')
 
 #####################################
 # CPU
 #####################################
-if True:
-    # Data, set unused value to none
-    group_list = schedulers
-    y_values = cpu_results
-    std_dev = None
-    x_ticks = range(1, 21)
-    legend_label = {
-        'none': 'None',
-        'kyber': 'Kyber',
-        'bfq': 'BFQ',
-        'mq-deadline': 'MQ-DL'
-    }
+# if True:
+    # # Data, set unused value to none
+    # group_list = schedulers
+    # y_values = cpu_results
+    # std_dev = None
+    # x_ticks = range(1, 21)
+    # legend_label = {
+    #     'none': 'None',
+    #     'kyber': 'Kyber',
+    #     'bfq': 'BFQ',
+    #     'mq-deadline': 'MQ-DL'
+    # }
 
-    title = None
-    xlabel = 'Number of SSDs'
-    ylabel = 'CPU usage'
-    fig_save_path = 'fig-9b-' + fig_name_prefix + '_cpu.pdf'
+    # title = None
+    # xlabel = 'Number of SSDs'
+    # ylabel = 'CPU usage'
+    # fig_save_path = 'fig-9b-' + fig_name_prefix + '_cpu.pdf'
 
-    reset_color()
-    fig, ax = plt.subplots(figsize=(12, 8))
+    # reset_color()
+    # fig, ax = plt.subplots(figsize=(12, 8))
 
-    ax.set_xlabel(xlabel, fontsize=axis_label_font_size)
-    ax.set_ylabel(ylabel, fontsize=axis_label_font_size)
-    ax.grid(True)
+    # ax.set_xlabel(xlabel, fontsize=axis_label_font_size)
+    # ax.set_ylabel(ylabel, fontsize=axis_label_font_size)
+    # ax.grid(True)
 
-    ax.tick_params(axis='both', which='major', labelsize=axis_tick_font_size)
-    ax.xaxis.set_ticks(list(range(1, len(devices) + 1)))
-    ax.yaxis.set_ticks([0, 2, 4, 6, 8, 10])
-    ax.set_xlim(0, 8.5)
-    ax.set_ylim(0, 11)
+    # ax.tick_params(axis='both', which='major', labelsize=axis_tick_font_size)
+    # ax.xaxis.set_ticks(list(range(1, len(devices) + 1)))
+    # ax.yaxis.set_ticks([0, 2, 4, 6, 8, 10])
+    # ax.set_xlim(0, 8.5)
+    # ax.set_ylim(0, 11)
 
-    # Throughput
-    for (index, group_name) in zip(range(len(group_list)), group_list):
-        # x, y, std_dev, data_label = data[group_name]
-        x = range(1, len(y_values[group_name]) + 1)
-        y = y_values[group_name]
-        yerr = None
-        if std_dev:
-            yerr = std_dev[group_name]
+    # # Throughput
+    # for (index, group_name) in zip(range(len(group_list)), group_list):
+    #     # x, y, std_dev, data_label = data[group_name]
+    #     x = range(1, len(y_values[group_name]) + 1)
+    #     y = y_values[group_name]
+    #     yerr = None
+    #     if std_dev:
+    #         yerr = std_dev[group_name]
 
-        ax.errorbar(
-            x,
-            y,
-            yerr=yerr,
-            label=legend_label[group_name],
-            marker=dot_style[index % len(dot_style)],
-            linewidth=linewidth,
-            markersize=markersize,
-        )
+    #     ax.errorbar(
+    #         x,
+    #         y,
+    #         yerr=yerr,
+    #         label=legend_label[group_name],
+    #         marker=dot_style[index % len(dot_style)],
+    #         linewidth=linewidth,
+    #         markersize=markersize,
+    #         color=get_next_color(),
+    #     )
 
-    plt.savefig(fig_save_path, bbox_inches='tight')
+    # plt.savefig(fig_save_path, bbox_inches='tight')

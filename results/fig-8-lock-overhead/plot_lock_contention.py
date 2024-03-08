@@ -75,12 +75,27 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Switch to type 1 fonts
-# matplotlib.rcParams['text.usetex'] = True
-# plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
+matplotlib.rcParams['text.usetex'] = True
+plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
 
-matplotlib_colors = [
-    'blue', 'green', 'red', 'cyan', 'magenta', 'yellw', 'white'
-]
+# matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# Check: https://personal.sron.nl/~pault/
+# Paul Tol's "bright" color scheme -> Figure 1
+matplotlib_color = ['#4477AA', '#228833', '#CCBB44', '#EE6677', '#AA3377', '#66CCEE', '#BBBBBB', '#332288']
+m_color_index = 0
+def get_next_color():
+    global m_color_index
+    c = matplotlib_color[m_color_index]
+    m_color_index += 1
+
+    return c
+
+
+def reset_color():
+    global m_color_index
+    m_color_index = 0
+
+
 
 dot_style = [
     '+',
@@ -104,7 +119,7 @@ legend_label = {
 }
 
 title = None
-xlabel = 'Number of processes'
+xlabel = '\# processes'
 ylabel = 'Lock overhead (\%)'
 fig_save_path = 'lock_overhead_1_dev.pdf'
 
@@ -113,7 +128,7 @@ bar_width = 0.2
 linewidth = 4
 markersize = 15
 
-datalabel_size = 36
+datalabel_size = 40
 datalabel_va = 'bottom'
 axis_tick_font_size = 46
 axis_label_font_size = 52
@@ -157,7 +172,8 @@ for (index, group_name) in zip(range(len(group_list)), group_list):
             y,
             width=bar_width,
             label=legend_label[group_name],
-            yerr=yerr)
+            yerr=yerr,
+            color=get_next_color())
 
     # print data label
     for (x, y, index) in zip(bar_pos, y, range(1, len(y) + 1)):
@@ -176,7 +192,7 @@ for (index, group_name) in zip(range(len(group_list)), group_list):
             y_offset = -2
         elif index == 1 and group_name == 'mq-deadline':
             x_offset = 0.2
-            y_offset = -5
+            y_offset = -8
         elif index == 1 and group_name == 'kyber':
             y_offset = -2
         plt.text(

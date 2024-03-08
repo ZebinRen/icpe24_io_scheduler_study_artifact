@@ -104,6 +104,7 @@ legend_label = {
     'mq-deadline': 'MQ-DL'
 }
 
+print(lapp_p99_tail_latency_results)
 ############################################
 # P99 Tail Latency
 ############################################
@@ -119,8 +120,8 @@ if True:
     }
 
     title = None
-    xlabel = 'Concurrent applications'
-    ylabel = 'Latency (millisecond)'
+    xlabel = 'Concurrent workloads'
+    ylabel = 'P99 latency (ms)'
     fig_save_path = 'fig-11c-' + fig_name_prefix + '_p99_lat.pdf'
 
     reset_color()

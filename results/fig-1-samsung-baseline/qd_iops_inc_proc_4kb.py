@@ -73,15 +73,14 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Switch to Type 1 Fonts.
-# matplotlib.rcParams['text.usetex'] = True
-# plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
+matplotlib.rcParams['text.usetex'] = True
+plt.rc('font', **{'family': 'serif', 'serif': ['Times']})
 
-matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# matplotlib_color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+# Check: https://personal.sron.nl/~pault/
+# Paul Tol's "bright" color scheme -> Figure 1
+matplotlib_color = ['#4477AA', '#228833', '#CCBB44', '#EE6677', '#AA3377', '#66CCEE', '#BBBBBB', '#332288']
 m_color_index = 0
-
-matplotlib_colors = [
-    'blue', 'green', 'red', 'cyan', 'magenta', 'yellw', 'white'
-]
 
 dot_style = [
     '+',
@@ -131,7 +130,7 @@ if True:
 
     title = None
     xlabel = 'Throughput (KIOPS)'
-    ylabel_ax1 = 'Latency ($\mu$s)'
+    ylabel_ax1 = 'Average latency ($\mu$s)'
     fig_save_path = 'fig-1b-qd-iops-inc-proc-4kb.pdf'
 
     reset_color()
@@ -142,9 +141,11 @@ if True:
     ax.grid(True)
 
     ax.tick_params(axis='both', which='major', labelsize=axis_tick_font_size)
-    ax.xaxis.set_ticks([0, 200, 400, 600, 800])
-    ax.set_xlim([0, 800])
+    ax.xaxis.set_ticks([200, 400, 600, 800])
+    ax.set_xlim([0, 850])
     ax.set_ylim([0, 1000])
+    ax.yaxis.set_ticks([0, 250, 500, 750, 1000])
+    ax.yaxis.set_ticklabels(['0', '250', '500', '750', '1,000'])
 
     # Throughput
     for (index, group_name) in zip(range(len(group_list)), group_list):
@@ -166,6 +167,7 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
         if group_name == '1':
             # Add data label
@@ -205,9 +207,10 @@ if True:
             marker=dot_style[index % len(dot_style)],
             linewidth=linewidth,
             markersize=markersize,
+            color=get_next_color(),
         )
 
-    ax.legend(
+    leg = ax.legend(
         fontsize=legend_font_size,
         ncol=3,
         loc='upper left',
@@ -219,6 +222,9 @@ if True:
         borderpad=0.0,
     )
 
+    for line in leg.get_lines():
+        line.set_linewidth(6)
+        
     # draw arrows
     plt.arrow(600, 500, 150, -160, width=10, head_width=20, color='black')
     plt.text(500, 520, '774 KIOPS', size=datalabel_size)
